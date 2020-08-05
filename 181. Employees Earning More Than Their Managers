@@ -1,0 +1,8 @@
+SELECT empName AS Employee
+FROM (
+    SELECT e1.Id AS empId, e1.Name AS empName, e1.Salary AS empSalary, e1.ManagerId AS mngId, e2.Name AS mngName, e2.Salary AS mngSalary
+    FROM Employee e1
+    LEFT JOIN Employee e2
+    ON e1.ManagerId=e2.Id
+) sub
+WHERE empSalary > mngSalary
