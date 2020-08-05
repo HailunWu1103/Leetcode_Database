@@ -1,0 +1,12 @@
+SELECT *
+FROM (
+  SELECT Department, Name AS Employee, Salary
+  FROM (
+      SELECT e.Id, e.Name, Salary, DepartmentId, d.Name AS Department, DENSE_RANK()OVER(PARTITION BY d.Name ORDER BY Salary DESC) AS r
+      FROM Employee e
+      LEFT JOIN Department d
+      ON e.DepartmentId=d.Id
+    ) sub
+  WHERE r<=3
+  ) sub1
+WHERE (Department IS NOT NULL) AND (Salary IS NOT NULL) AND (Employee IS NOT NULL)
