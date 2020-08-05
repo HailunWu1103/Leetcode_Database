@@ -1,0 +1,12 @@
+WITH CTE AS (
+    SELECT Client_Id, Driver_Id, Status, Request_at, Banned
+    FROM Trips t
+    LEFT JOIN Users u
+    ON t.Client_Id=u.Users_Id OR t.Driver_Id=u.Users_Id
+    WHERE (Request_at BETWEEN '2013-10-01' AND '2013-10-03') AND (CLIENT_ID IN (SELECT DISTINCT USERS_ID FROM USERS WHERE BANNED = 'NO'))
+AND (DRIVER_ID IN (SELECT DISTINCT USERS_ID FROM USERS WHERE BANNED = 'NO'))
+    ORDER BY Request_at
+)
+
+SELECT DISTINCT Request_at AS Day, ROUND(SUM(CASE WHEN Status LIKE 'cancelled%' THEN 1 ELSE 0 END)OVER(PARTITION BY Request_at)/COUNT(*)OVER(PARTITION BY Request_at),2) AS 'Cancellation Rate'
+FROM CTE
