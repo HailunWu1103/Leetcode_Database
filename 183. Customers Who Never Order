@@ -1,0 +1,8 @@
+SELECT Name AS Customers
+FROM (
+    SELECT c.Id, Name, o.Id AS orderId
+    FROM Customers c
+    LEFT JOIN Orders o
+    ON c.Id=o.CustomerId
+) sub
+WHERE orderId IS NULL
