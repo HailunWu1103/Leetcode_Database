@@ -1,0 +1,10 @@
+SELECT DISTINCT num1 AS ConsecutiveNums
+FROM (
+    SELECT l1.Id, l1.Num AS num1, l2.Num AS num2, l3.Num AS num3
+    FROM Logs l1
+    LEFT JOIN Logs l2
+    ON l1.Id=l2.Id+1
+    LEFT JOIN Logs l3
+    ON l1.Id=l3.Id+2
+) sub
+WHERE num1=num2 AND num1=num3
