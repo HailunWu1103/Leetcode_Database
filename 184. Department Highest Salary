@@ -1,0 +1,8 @@
+SELECT Department, Name AS Employee, Salary
+FROM (
+    SELECT e.Id, e.Name, e.Salary, e.DepartmentId, d.Name AS Department, RANK()OVER(PARTITION BY DepartmentId ORDER BY Salary DESC) AS r
+    FROM Employee e
+    LEFT JOIN Department d
+    ON e.DepartmentId=d.Id
+) sub
+WHERE r=1 AND Department IS NOT NULL
