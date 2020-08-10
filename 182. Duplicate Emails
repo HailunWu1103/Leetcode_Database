@@ -1,0 +1,6 @@
+SELECT DISTINCT Email
+FROM (
+    SELECT Email, COUNT(*)OVER(PARTITION BY Email) AS cnt
+    FROM Person
+) sub
+WHERE cnt > 1
