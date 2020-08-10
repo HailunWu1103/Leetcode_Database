@@ -1,0 +1,10 @@
+SELECT pay_month, department_id, CASE WHEN dep_avg>avg THEN 'higher' WHEN dep_avg=avg THEN 'same' ELSE 'lower' END AS comparison
+FROM (
+    SELECT DISTINCT pay_month, department_id, AVG(amount)OVER(PARTITION BY department_id, pay_month) AS dep_avg, AVG(amount)OVER(PARTITION BY pay_month) AS avg
+FROM (
+    SELECT s.employee_id, department_id, amount, LEFT(pay_date, 7) AS pay_month
+    FROM salary s
+    LEFT JOIN employee e
+    ON s.employee_id=e.employee_id
+) sub
+) sub1
