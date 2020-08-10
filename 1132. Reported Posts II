@@ -1,0 +1,11 @@
+SELECT ROUND(AVG(daily_percent)*100, 2) AS average_daily_percent
+FROM (
+    SELECT SUM(CASE WHEN extra='spam' AND remove_date IS NOT NULL THEN 1 ELSE 0 END)/SUM(CASE WHEN extra='spam' THEN 1 ELSE 0 END) AS daily_percent
+FROM (
+    SELECT a.post_id, action_date, action, extra, remove_date
+    FROM Actions a
+    LEFT JOIN Removals r
+    ON a.post_id=r.post_id
+) sub
+GROUP BY action_date
+) sub1
