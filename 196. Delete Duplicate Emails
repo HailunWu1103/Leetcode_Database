@@ -1,0 +1,8 @@
+DELETE FROM Person
+WHERE Id NOT IN (
+    SELECT Id FROM (
+        SELECT *, DENSE_RANK()OVER(PARTITION BY Email ORDER BY Id ASC) AS r
+        FROM Person    
+    ) sub
+    WHERE r = 1    
+)
