@@ -1,0 +1,8 @@
+SELECT Id
+FROM (
+    SELECT w1.Id, w1.RecordDate, w1.Temperature, w2.RecordDate AS prev_date, w2.Temperature AS prev_temp
+    FROM Weather w1
+    LEFT JOIN Weather w2
+    ON w1.RecordDate=DATE_ADD(w2.RecordDate, INTERVAL +1 DAY)
+) sub
+WHERE Temperature > prev_temp
