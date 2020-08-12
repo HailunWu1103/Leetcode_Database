@@ -1,0 +1,36 @@
+WITH CTE AS (
+    SELECT v.user_id, visit_date, transaction_date, amount, IFNULL(COUNT(transaction_date)OVER(PARTITION BY v.user_id, transaction_date), 0) AS transactions_count
+    FROM Visits v
+    LEFT JOIN Transactions t
+    ON v.user_id=t.user_id AND visit_date = transaction_date
+)
+
+SELECT transactions_count, SUM(CASE WHEN transactions_count=0 THEN 1 ELSE 0 END) AS visits_count
+FROM (
+    SELECT DISTINCT transactions_count, user_id, visit_date
+    FROM CTE
+) sub
+UNION
+(
+    SELECT 1 AS transactions_count, SUM(CASE WHEN transactions_count=1 THEN 1 ELSE 0 END) AS visits_count
+FROM (
+    SELECT DISTINCT transactions_count, user_id, visit_date
+    FROM CTE
+) sub1
+)
+UNION
+(
+    SELECT 2 AS transactions_count, SUM(CASE WHEN transactions_count=2 THEN 1 ELSE 0 END) AS visits_count
+FROM (
+    SELECT DISTINCT transactions_count, user_id, visit_date
+    FROM CTE
+) sub2
+)
+UNION
+(
+    SELECT 3 AS transactions_count, SUM(CASE WHEN transactions_count=3 THEN 1 ELSE 0 END) AS visits_count
+FROM (
+    SELECT DISTINCT transactions_count, user_id, visit_date
+    FROM CTE
+) sub3
+)
