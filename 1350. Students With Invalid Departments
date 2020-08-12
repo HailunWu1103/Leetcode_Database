@@ -1,0 +1,8 @@
+SELECT id, name
+FROM (
+    SELECT s.id, s.name, department_id, d.name AS department
+    FROM Students s
+    LEFT JOIN Departments d
+    ON s.department_id=d.id
+) sub
+WHERE department IS NULL
