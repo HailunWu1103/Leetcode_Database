@@ -1,0 +1,6 @@
+SELECT student_id, course_id, grade
+FROM (
+    SELECT *, DENSE_RANK()OVER(PARTITION BY student_id ORDER BY grade DESC, course_id ASC) AS r
+    FROM Enrollments e
+) sub
+WHERE r=1
