@@ -1,0 +1,6 @@
+SELECT DISTINCT product_name, sale_date, COUNT(*)OVER(PARTITION BY product_name, sale_date) AS total
+FROM (
+    SELECT TRIM(LOWER(product_name)) AS product_name, LEFT(sale_date,7) AS sale_date
+    FROM Sales
+) sub
+ORDER BY product_name ASC, sale_date ASC
