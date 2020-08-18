@@ -1,0 +1,12 @@
+SELECT requester_id AS id, COUNT(*) AS num
+FROM (
+    SELECT requester_id, accepter_id, accept_date
+    FROM request_accepted
+    UNION (
+        SELECT accepter_id, requester_id, accept_date
+        FROM request_accepted
+    )
+) sub
+GROUP BY requester_id
+ORDER BY num DESC
+LIMIT 1
