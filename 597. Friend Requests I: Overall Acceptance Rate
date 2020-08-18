@@ -1,0 +1,2 @@
+SELECT ROUND(IFNULL((SELECT COUNT(*) FROM (SELECT DISTINCT requester_id, accepter_id FROM request_accepted) sub)/COUNT(*),0),2) AS accept_rate
+FROM friend_request
