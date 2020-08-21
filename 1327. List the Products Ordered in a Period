@@ -1,0 +1,9 @@
+SELECT DISTINCT product_name, unit
+FROM (
+    SELECT o.product_id, product_name, SUM(unit)OVER(PARTITION BY o.product_id) AS unit
+    FROM Orders o
+    LEFT JOIN Products p
+    ON o.product_id=p.product_id
+    WHERE LEFT(order_date,7)='2020-02'
+) sub
+WHERE unit>=100
