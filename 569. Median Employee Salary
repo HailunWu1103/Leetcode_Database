@@ -1,0 +1,6 @@
+SELECT Id, Company, Salary
+FROM (
+    SELECT *, ROW_NUMBER()OVER(PARTITION BY Company ORDER BY Salary ASC) AS r, COUNT(*)OVER(PARTITION BY Company) AS cnt
+    FROM Employee
+) sub
+WHERE (cnt%2=0 AND (r=cnt/2 OR r=cnt/2+1)) OR (cnt%2=1 AND r=cnt DIV 2+1)
