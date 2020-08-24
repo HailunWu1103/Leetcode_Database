@@ -1,0 +1,8 @@
+SELECT buyer_id
+FROM (
+    SELECT buyer_id, s.product_id, product_name, COUNT(product_name)OVER(PARTITION BY buyer_id) AS cnt
+    FROM Sales s
+    LEFT JOIN Product p
+    ON s.product_id=p.product_id AND (product_name='iPhone' OR product_name='S8')
+) sub
+WHERE cnt<2 AND product_name IS NOT NULL
