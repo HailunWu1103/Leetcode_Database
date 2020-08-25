@@ -1,0 +1,10 @@
+SELECT DISTINCT id, name
+FROM (
+    SELECT a.id, a.name, l1.login_date, l2.login_date AS five_day, DENSE_RANK()OVER(PARTITION BY a.id ORDER BY l1.login_date ASC) AS r
+    FROM Accounts a
+    LEFT JOIN Logins l1
+    ON a.id=l1.id
+    LEFT JOIN Logins l2
+    ON l1.login_date=DATE_ADD(l2.login_date, INTERVAL -4 DAY)
+) sub
+WHERE five_day IS NOT NULL AND r>=5
