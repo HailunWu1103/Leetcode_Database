@@ -1,0 +1,11 @@
+SELECT DISTINCT activity
+FROM (
+    SELECT name AS activity, RANK()OVER(ORDER BY cnt ASC) AS min_r, RANK()OVER(ORDER BY cnt DESC) AS max_r
+    FROM (
+        SELECT a.name, f.id, COUNT(*)OVER(PARTITION BY a.name) AS cnt
+        FROM Activities a
+        LEFT JOIN Friends f
+        ON a.name=f.activity
+    ) sub
+) sub
+WHERE max_r!=1 AND min_r!=1
