@@ -1,0 +1,7 @@
+SELECT DISTINCT id, CASE WHEN p_id IS NULL THEN 'Root' WHEN p_id IS NOT NULL AND c_id IS NOT NULL THEN 'Inner' ELSE 'Leaf' END AS Type
+FROM (
+    SELECT t1.id, t1.p_id, t2.id AS c_id
+    FROM tree t1
+    LEFT JOIN tree t2
+    ON t2.p_id=t1.id
+) sub
