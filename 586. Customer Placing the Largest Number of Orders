@@ -1,0 +1,7 @@
+SELECT DISTINCT customer_number
+FROM (
+    SELECT customer_number, COUNT(*)OVER(PARTITION BY customer_number) AS cnt
+    FROM orders
+) sub
+ORDER BY cnt DESC
+LIMIT 1
