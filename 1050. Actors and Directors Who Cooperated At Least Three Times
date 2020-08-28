@@ -1,0 +1,6 @@
+SELECT DISTINCT actor_id, director_id
+FROM (
+    SELECT *, COUNT(*)OVER(PARTITION BY actor_id, director_id) AS cnt
+    FROM ActorDirector
+) sub
+WHERE cnt>=3
