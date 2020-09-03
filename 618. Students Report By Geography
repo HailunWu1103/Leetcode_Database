@@ -1,0 +1,12 @@
+SELECT s1.name AS America, s2.name AS Asia, s3.name AS Europe
+FROM (
+    SELECT *, ROW_NUMBER()OVER(ORDER BY name ASC) AS r FROM student WHERE continent='America'
+) s1
+LEFT JOIN (
+    SELECT *, ROW_NUMBER()OVER(ORDER BY name ASC) AS r FROM student WHERE continent='Asia'
+) s2
+ON s1.r=s2.r
+LEFT JOIN (
+    SELECT *, ROW_NUMBER()OVER(ORDER BY name ASC) AS r FROM student WHERE continent='Europe'
+) s3
+ON s1.r=s3.r
