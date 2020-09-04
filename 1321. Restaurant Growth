@@ -1,0 +1,7 @@
+SELECT visited_on, amount, ROUND(amount/7, 2) AS average_amount
+FROM (
+    SELECT visited_on, SUM(amount)OVER(ORDER BY visited_on ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS amount
+    FROM (SELECT DISTINCT visited_on, SUM(amount)OVER(PARTITION BY visited_on) AS amount FROM Customer) c
+) sub
+WHERE DATE_ADD(visited_on, INTERVAL -6 DAY) IN (SELECT visited_on FROM Customer)
+ORDER BY visited_on ASC
