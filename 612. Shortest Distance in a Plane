@@ -1,0 +1,9 @@
+SELECT DISTINCT ROUND(SQRT(POWER((x1-x),2)+POWER((y1-y),2)),2) AS shortest
+FROM (
+    SELECT p1.x, p1.y, p2.x AS x1, p2.y AS y1
+    FROM (SELECT *, ROW_NUMBER()OVER() AS r FROM point_2d) p1
+    LEFT JOIN (SELECT *, ROW_NUMBER()OVER() AS r FROM point_2d) p2
+    ON p1.r!=p2.r
+) sub
+ORDER BY shortest ASC
+LIMIT 1
