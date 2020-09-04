@@ -1,0 +1,4 @@
+SELECT DISTINCT name AS WAREHOUSE_NAME, SUM(volume*units)OVER(PARTITION BY name) AS VOLUME
+FROM Warehouse w
+LEFT JOIN (SELECT product_id, SUM(Width*Length*Height)OVER(PARTITION BY product_id) AS volume FROM Products) p
+ON w.product_id=p.product_id
