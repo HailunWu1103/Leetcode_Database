@@ -1,0 +1,12 @@
+SELECT DISTINCT ABS(p1.x-p2.x) AS shortest
+FROM (
+    SELECT x, ROW_NUMBER()OVER() AS r
+    FROM point
+) p1
+LEFT JOIN (
+    SELECT x, ROW_NUMBER()OVER() AS r
+    FROM point
+) p2
+ON p1.r!=p2.r
+ORDER BY ABS(p1.x-p2.x) ASC
+LIMIT 1
