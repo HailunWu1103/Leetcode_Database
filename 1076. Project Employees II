@@ -1,0 +1,11 @@
+SELECT project_id
+FROM (
+    SELECT DISTINCT project_id, RANK()OVER(ORDER BY cnt DESC) AS r
+    FROM (
+        SELECT project_id, p.employee_id, name, COUNT(p.employee_id)OVER(PARTITION BY project_id) AS cnt
+        FROM Project p
+        LEFT JOIN Employee e
+        ON p.employee_id=e.employee_id
+    ) sub
+) sub1
+WHERE r=1
