@@ -1,0 +1,3 @@
+SELECT DISTINCT followee AS follower, COUNT(*)OVER(PARTITION BY followee) AS num
+FROM follow
+WHERE followee IN (SELECT follower FROM follow)
