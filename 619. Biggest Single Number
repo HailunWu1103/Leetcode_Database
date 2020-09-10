@@ -1,0 +1,8 @@
+SELECT num
+FROM (
+    SELECT *, COUNT(*)OVER(PARTITION BY num) AS cnt
+    FROM my_numbers
+) sub
+WHERE cnt=1
+ORDER BY num DESC
+LIMIT 1
