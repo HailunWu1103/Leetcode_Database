@@ -1,0 +1,8 @@
+SELECT DISTINCT customer_id, COUNT(*)OVER(PARTITION BY customer_id) AS count_no_trans
+FROM (
+    SELECT v.visit_Id, customer_id, transaction_id
+    FROM Visits v
+    LEFT JOIN Transactions t
+    ON v.visit_id=t.visit_id
+) sub
+WHERE transaction_id IS NULL
