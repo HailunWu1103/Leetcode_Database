@@ -1,0 +1,8 @@
+SELECT DISTINCT Manager AS Name
+FROM (
+    SELECT e1.Id, e1.Name, e1.ManagerId, e2.Name AS Manager, COUNT(*)OVER(PARTITION BY e1.ManagerId) AS cnt
+    FROM Employee e1
+    LEFT JOIN Employee e2
+    ON e1.ManagerId=e2.Id
+) sub
+WHERE cnt>=5
