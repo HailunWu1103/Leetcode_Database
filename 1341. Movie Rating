@@ -1,0 +1,27 @@
+WITH CTE AS (
+    SELECT mr.movie_id, title, mr.user_id, name, rating, created_at, COUNT(*)OVER(PARTITION BY name) AS cnt
+    FROM Movie_Rating mr
+    LEFT JOIN Movies m
+    ON mr.movie_id=m.movie_id
+    LEFT JOIN Users u
+    ON mr.user_id=u.user_id
+),
+CTE1 AS (
+    SELECT mr.movie_id, title, mr.user_id, name, rating, created_at, AVG(rating)OVER(PARTITION BY title) AS avg_r
+    FROM Movie_Rating mr
+    LEFT JOIN Movies m
+    ON mr.movie_id=m.movie_id AND LEFT(created_at,7)='2020-02'
+    LEFT JOIN Users u
+    ON mr.user_id=u.user_id
+)
+
+(SELECT name AS results
+FROM CTE
+WHERE cnt= (SELECT MAX(cnt) FROM CTE ORDER BY name ASC)
+LIMIT 1)
+UNION (
+    SELECT title
+    FROM CTE1
+    ORDER BY avg_r DESC, title ASC
+    LIMIT 1
+)
