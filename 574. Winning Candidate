@@ -1,0 +1,9 @@
+SELECT DISTINCT Name
+FROM (
+    SELECT CandidateId, Name, COUNT(*)OVER(PARTITION BY CandidateId) AS cnt
+    FROM Vote v
+    LEFT JOIN Candidate c
+    ON c.id=v.CandidateId
+) sub
+ORDER BY cnt DESC
+LIMIT 1
