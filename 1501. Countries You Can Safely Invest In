@@ -1,0 +1,10 @@
+SELECT name AS country
+FROM (
+    SELECT duration, ct.name, AVG(duration) AS gl_avg, AVG(duration)OVER(PARTITION BY ct.name) AS ct_avg
+    FROM Calls c
+    LEFT JOIN Person p
+    ON c.caller_id=p.id OR c.callee_id=p.id
+    LEFT JOIN Country ct
+    ON LEFT(p.phone_number,3)=ct.country_code
+) sub
+WHERE ct_avg>gl_avg
