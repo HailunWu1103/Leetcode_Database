@@ -1,0 +1,4 @@
+SELECT IFNULL(unique_id, NULL) AS unique_id, name
+FROM Employees e
+LEFT JOIN EmployeeUNI u
+ON e.id=u.id
