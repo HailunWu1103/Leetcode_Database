@@ -1,0 +1,9 @@
+SELECT p1, p2, p1*p2 AS area
+FROM (
+    SELECT CASE WHEN ABS(p1.x_value-p2.x_value)<ABS(p1.y_value-p2.y_value) THEN ABS(p1.x_value-p2.x_value) ELSE ABS(p1.y_value-p2.y_value) END AS p1, CASE WHEN ABS(p1.x_value-p2.x_value)<ABS(p1.y_value-p2.y_value) THEN ABS(p1.y_value-p2.y_value) ELSE ABS(p1.x_value-p2.x_value) END AS p2
+    FROM Points p1
+    LEFT JOIN Points p2
+    ON p1.id=p2.id-1 AND p1.x_value!=p2.x_value AND p1.y_value!=p2.y_value
+) sub
+WHERE p1 IS NOT NULL AND p2 IS NOT NULL
+ORDER BY area DESC, FIELD(p1,p2) ASC
