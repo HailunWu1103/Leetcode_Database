@@ -1,0 +1,5 @@
+SELECT DISTINCT title
+FROM TVProgram tv
+LEFT JOIN Content c
+ON tv.content_id=c.content_id
+WHERE LEFT(program_date,7)='2020-06' AND Kids_content='Y' AND content_type='Movies'
