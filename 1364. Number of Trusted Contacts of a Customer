@@ -1,0 +1,15 @@
+SELECT DISTINCT invoice_id, customer_name, price, IFNULL(contacts_cnt,0) AS contacts_cnt, IFNULL(trusted_contacts_cnt,0) AS trusted_contacts_cnt
+FROM Invoices i
+LEFT JOIN Customers cus
+ON i.user_id=cus.customer_id
+LEFT JOIN (
+    SELECT user_id, COUNT(contact_name)OVER(PARTITION BY user_id) AS contacts_cnt
+    FROM Contacts
+) con
+ON cus.customer_id=con.user_id
+LEFT JOIN (
+    SELECT user_id, COUNT(contact_name)OVER(PARTITION BY user_id) AS trusted_contacts_cnt
+    FROM Contacts WHERE contact_name IN (SELECT customer_name FROM Customers)
+) trusted_con
+ON cus.customer_id=trusted_con.user_id
+ORDER BY invoice_id
