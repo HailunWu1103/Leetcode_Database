@@ -1,0 +1,8 @@
+SELECT DISTINCT country_name, CASE WHEN avg_weather_state<=15 THEN 'Cold' WHEN avg_weather_state>=25 THEN 'Hot' ELSE 'Warm' END AS weather_type
+FROM (
+    SELECT country_name, AVG(weather_state)OVER(PARTITION BY country_name) AS avg_weather_state
+    FROM Countries c
+    LEFT JOIN Weather w
+    ON c.country_id=w.country_id
+    WHERE LEFT(day, 7)='2019-11'
+) sub
