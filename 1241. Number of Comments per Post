@@ -1,0 +1,8 @@
+SELECT DISTINCT post_id, COUNT(sub_id)OVER(PARTITION BY post_id) AS number_of_comments
+FROM (
+    SELECT DISTINCT s1.sub_id AS post_id, s2.sub_id
+    FROM Submissions s1
+    LEFT JOIN Submissions s2
+    ON s2.parent_id=s1.sub_id
+    WHERE s1.parent_id IS NULL
+) sub
