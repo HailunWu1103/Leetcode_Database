@@ -1,0 +1,8 @@
+SELECT DISTINCT viewer_id AS id
+FROM (
+    SELECT *, COUNT(DISTINCT article_id) AS cnt
+    FROM Views
+    GROUP BY viewer_id, view_date
+) sub
+WHERE cnt>1
+ORDER BY id ASC
