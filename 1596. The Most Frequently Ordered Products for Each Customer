@@ -1,0 +1,11 @@
+SELECT DISTINCT customer_id, product_id, product_name
+FROM (
+    SELECT customer_id, product_id, product_name, RANK()OVER(PARTITION BY customer_id ORDER BY cnt DESC) AS r
+    FROM (
+        SELECT order_id, o.customer_id, o.product_id, product_name, COUNT(order_id)OVER(PARTITION BY o.customer_id, o.product_id) AS cnt
+        FROM Orders o
+        LEFT JOIN Products p
+        ON o.product_id=p.product_id
+    ) sub
+) sub1
+WHERE r=1
