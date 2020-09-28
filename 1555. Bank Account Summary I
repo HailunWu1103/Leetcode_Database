@@ -1,0 +1,9 @@
+SELECT DISTINCT user_id, user_name, SUM(credit-paid+received)OVER(PARTITION BY user_id) AS credit, CASE WHEN SUM(credit-paid+received)OVER(PARTITION BY user_id)>=0 THEN 'No' ELSE 'Yes' END AS credit_limit_breached
+FROM (
+    SELECT u.user_id, user_name, credit, SUM(IFNULL(t1.amount,0))OVER(PARTITION BY u.user_id) AS paid, SUM(IFNULL(t2.amount,0))OVER(PARTITION BY u.user_id) AS received
+    FROM Users u
+    LEFT JOIN Transaction t1
+    ON u.user_id=t1.paid_by
+    LEFT JOIN Transaction t2
+    ON u.user_id=t2.paid_to
+) sub
