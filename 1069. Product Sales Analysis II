@@ -1,0 +1,4 @@
+SELECT DISTINCT s.product_id, SUM(quantity)OVER(PARTITION BY s.product_id) AS total_quantity
+FROM Sales s
+LEFT JOIN Product p
+ON s.product_id=p.product_id
